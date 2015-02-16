@@ -5,6 +5,10 @@ import random
 import re
 import sys
 
+if len(sys.argv) != 2:
+    print "Usage: python gen-twitter.py <numrecords>"
+    sys.exit(1)
+
 def loadfile(filename):
     handle = open(filename, 'r')
 
