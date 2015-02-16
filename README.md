@@ -13,12 +13,14 @@ This course requires Redis and can be downloaded from redis.io
 
 The following should be sufficient to get started and build Redis if you are using Linux.  If you are using a Mac, simply download the latest stable release instead of using wget.
 
-You'll need some development libraries installed to get it to build properly.
-
-$ wget http://download.redis.io/redis-stable.tar.gz
 $ tar xzf redis-stable.tar.gz
 $ cd redis-stable
 $ make
 
 $ src/redis-server
+
+Run gen-twitter.py to randomly generate three files used in the exercises
+
+$ python gen-twitter.py 1000000
+
 
