@@ -33,17 +33,14 @@ public class MRBloomFilter extends Configured implements Tool {
 				InterruptedException {
 
 			// TODO Create a FileSystem object
-			FileSystem fs = FileSystem.get(context.getConfiguration());
 
 			// TODO get the cache files from the context
-			URI[] uris = context.getCacheFiles();
+			URI[] uris = null;
 
 			if (uris.length > 0) {
 				// TODO create a new Bloom filter
-				filter = new BloomFilter();
 				
 				// TODO call the filter's readFields method, passing in an FSDataInputStream
-				filter.readFields(fs.open(new Path(uris[0].toString())));
 			} else {
 				throw new IOException(
 						"Bloom filter file not in DistributedCache");
@@ -55,16 +52,11 @@ public class MRBloomFilter extends Configured implements Tool {
 				throws IOException, InterruptedException {
 
 			// TODO split the input key on tabs
-			tokens = value.toString().trim().split("\t", 2);
 			
 			// TODO set the bfKey's bytes to the 0-th token (username), weight of 1.0
-			bfKey.set(tokens[0].getBytes(), 1.0);
 
 			// TODO if the filter's membership test passes
-			if (filter.membershipTest(bfKey)) {
 				// TODO write the input value as the key with a NullWritable value
-				context.write(value, NullWritable.get());
-			}
 		}
 	}
 
@@ -81,32 +73,23 @@ public class MRBloomFilter extends Configured implements Tool {
 		Path output = new Path(args[2]);
 
 		// TODO create the Job object, and set the jar by class
-		Job job = Job.getInstance(getConf(), "Bloom Filtering");
-		job.setJarByClass(MRBloomFilter.class);
 
 		// TODO add the Bloom URI file to the cache
-		job.addCacheFile(bloom);
 
 		// TODO set the mapper class
-		job.setMapperClass(BloomMapper.class);
 
 		// TODO set the number of reduce tasks to 0
-		job.setNumReduceTasks(0);
 
 		// TODO set the input paths
-		TextInputFormat.setInputPaths(job, input);
 
 		// TODO set the output paths
-		TextOutputFormat.setOutputPath(job, output);
 
 		// TODO set the output key class to Text
-		job.setOutputKeyClass(Text.class);
 
 		// TODO set the output value class to NullWritable
-		job.setOutputValueClass(NullWritable.class);
-		
+
 		// TODO execute the job via wait for completion and return 0 if successful
-		return job.waitForCompletion(true) ? 0 : 1;
+		return 0;
 	}
 
 	public static void main(String[] args) throws Exception {

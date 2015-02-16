@@ -2,10 +2,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>bloomfilter</groupId>
-	<artifactId>mapreduce</artifactId>
+	<artifactId>tester</artifactId>
 	<version>1.0.0</version>
 	<properties>
 		<hadoop.version>2.6.0</hadoop.version>
+		<jedis.version>2.6.2</jedis.version>
 	</properties>
 
 	<build>
@@ -31,18 +32,10 @@
 					</execution>
 				</executions>
 				<configuration>
-					<filters>
-						<filter>
-							<artifact>org.apache.hadoop:hadoop-mapreduce-client-jobclient</artifact>
-							<excludes>
-								<exclude>META-INF/services/org.apache.hadoop.mapreduce.protocol.ClientProtocolProvider</exclude>
-							</excludes>
-						</filter>
-					</filters>
 					<transformers>
 						<transformer
 							implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-							<mainClass>bloomfilter.MRBloomFilter</mainClass>
+							<mainClass>bloomfilter.Tester</mainClass>
 						</transformer>
 					</transformers>
 				</configuration>
@@ -56,9 +49,9 @@
 			<version>${hadoop.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hadoop</groupId>
-			<artifactId>hadoop-mapreduce-client-jobclient</artifactId>
-			<version>${hadoop.version}</version>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>${jedis.version}</version>
 		</dependency>
 	</dependencies>
 </project>

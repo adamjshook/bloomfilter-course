@@ -25,35 +25,26 @@ public class Tester extends Configured implements Tool {
 		System.out.println("Testing Redis set membership of " + input);
 		
 		// TODO create a fileSystem object
-		FileSystem fs = FileSystem.get(getConf());
 		
 		// TODO connect to Redis at localhost, port 6379
-		jedis = new Jedis("localhost", 6379);
-		jedis.connect();
 
 		// TODO Open the testing file for read
 		String line = null;
 		int numhits = 0, numlines = 0;
-		BufferedReader rdr = new BufferedReader(new InputStreamReader(
-				fs.open(input)));
+		BufferedReader rdr = null;
 
 		long start = System.currentTimeMillis();
 		while ((line = rdr.readLine()) != null) {
 			// TODO increment numlines
-			++numlines;
 			
 			// TODO Test the line using jedis 'sismember' function
-			if (jedis.sismember(REDIS_SET_KEY, line)) {
 				// TODO increment numhits
-				++numhits;
-			}
+			
 		}
 		long finish = System.currentTimeMillis();
 
 		// TODO Close reader and disconnect Jedis
-		rdr.close();
-		jedis.disconnect();
-
+		
 		System.out.println("Took " + (finish - start) + " ms to check Redis "
 				+ numlines + " times for " + numhits + " successful tests");
 
@@ -66,23 +57,17 @@ public class Tester extends Configured implements Tool {
 				+ " using a Bloom filter " + bloom);
 		
 		// TODO create a fileSystem object
-		FileSystem fs = FileSystem.get(getConf());
 		
 		// TODO connect to Redis at localhost, port 6379
-		jedis = new Jedis("localhost", 6379);
-		jedis.connect();
 		
 		// TODO Create a new BloomFilter object
-		BloomFilter filter = new BloomFilter();
 		
 		// TODO call readFields with an FSDataInputStream from the file
-		filter.readFields(fs.open(bloom));
-		
+
 		// TODO Open the testing file for read
 		String line = null;
 		int numBFhits = 0, numhits = 0, numlines = 0;
-		BufferedReader rdr = new BufferedReader(new InputStreamReader(
-				fs.open(input)));
+		BufferedReader rdr = null;
 		
 		// TODO create a new Key to re-use
 		Key key = new Key();
@@ -90,28 +75,18 @@ public class Tester extends Configured implements Tool {
 		long start = System.currentTimeMillis();
 		while ((line = rdr.readLine()) != null) {
 			// TODO increment numlines
-			++numlines;
 			
 			// TODO set the bytes of the key to line's bytes with a weight of 1.0
-			key.set(line.getBytes(), 1.0);
 			
 			// TODO membership test the key
-			if (filter.membershipTest(key)) {
 				// TODO increment numBFhits
-				++numBFhits;
 
 				// TODO test jedis using sismember
-				if (jedis.sismember(REDIS_SET_KEY, line)) {
 					// TODO increment numhits
-					++numhits;
-				}
-			}
 		}
 		long finish = System.currentTimeMillis();
 
 		// TODO close the file reader and Redis client
-		rdr.close();
-		jedis.disconnect();
 
 		System.out.println("Took " + (finish - start) + " ms to check Redis "
 				+ numlines + " times for " + numhits

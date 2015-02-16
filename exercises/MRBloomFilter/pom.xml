@@ -5,7 +5,7 @@
 	<artifactId>mapreduce</artifactId>
 	<version>1.0.0</version>
 	<properties>
-		<hadoop.version>2.6.0</hadoop.version>
+		<hadoop.version>2.2.0</hadoop.version>
 	</properties>
 
 	<build>
